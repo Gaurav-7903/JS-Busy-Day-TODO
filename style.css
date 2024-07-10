@@ -1,0 +1,410 @@
+@import url("https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap");
+
+:root {
+  --color-1: #fff6e7;
+  --color-2: #e5ffe6;
+  --color-3: #f3e4f7;
+  --color-4: #edbbb4;
+  --color-5: #ececec;
+
+  --fc: #000000;
+  --fc-secondary: #525252;
+
+  --ff-main: "Figtree", sans-serif;
+
+  --fw-bold: 750;
+  --fw-semibold: 550;
+  --fw-regular: 300;
+
+  --fs-main: 42px;
+  --fs-heading: 24px;
+  --fs-todo-heading: 20px;
+  --fs-body: 16px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  font: inherit;
+}
+
+ul[role="list"],
+ol[role="list"] {
+  list-style: none;
+}
+
+/* Set core root defaults */
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  min-height: 100vh;
+  text-rendering: optimizeSpeed;
+  line-height: 1.5;
+}
+
+/* Make images easier to work with */
+img,
+picture,
+svg {
+  max-width: 100%;
+  display: block;
+}
+
+/* Remove all animations, transitions and smooth scroll for people that prefer not to see them */
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.bg-color-1 {
+  background-color: var(--color-1);
+}
+
+.bg-color-2 {
+  background-color: var(--color-2);
+}
+
+.bg-color-3 {
+  background-color: var(--color-3);
+}
+
+.bg-color-4 {
+  background-color: var(--color-4);
+}
+
+.bg-color-5 {
+  background-color: var(--color-5);
+}
+
+body {
+  font-family: var(--ff-main);
+  min-height: 100vh;
+}
+
+header {
+  padding: 1.2rem;
+  text-align: center;
+  justify-content: center;
+  gap: 0.4rem;
+  font-weight: var(--fw-semibold);
+  display: flex;
+  font-size: var(--fs-heading);
+  background-image: linear-gradient(to right,
+      var(--color-1),
+      var(--color-2),
+      var(--color-3),
+      var(--color-4));
+}
+
+.container {
+  /* border: 1px solid black; */
+  --max-width: 1110px;
+  --padding: 1rem;
+
+  width: min(var(--max-width), 100% - var(--padding) * 2);
+  margin-inline: auto;
+}
+
+.fs-42 {
+  font-size: var(--fs-main);
+}
+
+.fs-todo-heading {
+  font-size: var(--fs-heading);
+  font-weight: var(--fw-semibold);
+  line-height: 1.2;
+}
+
+.fs-todo-heading[contenteditable="true"] {
+  opacity: .5;
+}
+
+.fw-bold {
+  font-weight: var(--fw-bold);
+}
+
+.flex {
+  display: flex;
+}
+
+section {
+  padding-block: .5rem;
+}
+
+/* header*/
+.title {
+  justify-content: space-between;
+  align-items: center;
+  padding-block: 1rem;
+}
+
+.date {
+  display: flex;
+  gap: .2rem;
+  align-items: center;
+}
+
+.icon {
+  width: 1.3rem;
+}
+
+.date p {
+  text-wrap: nowrap;
+}
+
+.title .temp {
+  margin-left: 1rem;
+}
+
+
+/* Styling for the select dropdown */
+.filter {
+  justify-content: space-between;
+  margin-bottom: .8rem;
+}
+
+.filter-section {
+  display: flex;
+  font-family: Arial, sans-serif;
+  gap: .8rem;
+}
+
+.filter-section select {
+  padding: 0.4rem 0.8rem;
+  font-size: 16px;
+  border: none;
+  border-radius: 0.4rem;
+  background-color: #3d3d3d;
+  color: #fff;
+  outline: none;
+  cursor: pointer;
+}
+
+.filter-section select option {
+  background-color: #fff;
+  color: #000;
+}
+
+
+.filter-section select option:hover {
+  background-color: #646464;
+  color: #000;
+}
+
+.filter-section select:focus {
+  box-shadow: 0 0 0 0.1rem rgba(0, 0, 0, 0.25);
+}
+
+/* .filter-section select {
+  width: 150px;
+} */
+
+
+/* main  */
+.add-list-btn {
+  background-color: var(--fc);
+  color: #fff;
+  font-weight: var(--fw-semibold);
+  border-radius: .4rem;
+  padding: .4rem 5rem .4rem .8rem;
+  outline: none;
+  border: none;
+  gap: .3rem;
+}
+
+.main-wrapper {
+  display: flex;
+  justify-content: start;
+  flex-wrap: wrap;
+  gap: 4rem;
+}
+
+/* todo container */
+
+.todo-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: fit-content;
+}
+
+.card {
+  padding: 1rem;
+  border: 1px solid var(--fc);
+  border-radius: 10px;
+  width: 18rem;
+}
+
+button[visible="false"] {
+  outline: none;
+  border: none;
+  background: transparent;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+.todo-header {
+  justify-content: space-between;
+  align-items: start;
+}
+
+/* date todo  */
+.todo-date {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+}
+
+.calendar-icon {
+  left: 10px;
+  cursor: pointer;
+}
+
+.due-date {
+  display: none;
+}
+
+
+/* list */
+.todo-item {
+  margin-block: .3rem;
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  position: relative;
+  padding-inline: .2rem;
+  border-radius: 3px;
+}
+
+.todo-item:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+input[type="checkbox"]:checked+span {
+  text-decoration: line-through;
+}
+
+input[type="checkbox"] {
+  min-width: 18px;
+  min-height: 18px;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: #ffffff;
+  border: 2px solid var(--fc);
+  border-radius: 3px;
+  position: relative;
+}
+
+/* Style the checkbox when checked */
+input[type="checkbox"]:checked {
+  background-color: #000000;
+}
+
+input[type="checkbox"]:checked::before {
+  content: '';
+  position: absolute;
+  top: .5px;
+  left: 3.5px;
+  width: 6px;
+  height: 11px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.delete-icon {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: black;
+  position: absolute;
+  right: 0;
+}
+
+.todo-item:hover .delete-icon {
+  display: block;
+}
+
+.task-input-container {
+  margin-top: .8rem;
+  position: relative;
+}
+
+.add-new-task {
+  padding-left: 30px;
+  height: 30px;
+  font-size: 16px;
+  border-radius: 5px;
+}
+
+.task-input-container::before {
+  content: "+";
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
+  color: #888;
+  pointer-events: none;
+}
+
+.task-text{
+  line-height: 1;
+}
+
+.tasks li input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+.tasks li span {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+input[type="text"] {
+  width: 100%;
+  outline: none;
+  border: none;
+  box-sizing: border-box;
+}
+
+footer {
+  background-color: #f0f0f0;
+  text-align: center;
+  padding: 10px;
+  position: relative;
+  bottom: 0;
+  width: 100%;
+}

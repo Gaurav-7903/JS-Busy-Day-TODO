@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Datepicker Example</title>
+    <style>
+        /* Basic styling for the datepicker */
+        .datepicker {
+            font-family: Arial, sans-serif;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: absolute;
+            z-index: 1000;
+            display: none;
+        }
+
+        .datepicker table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .datepicker table th,
+        .datepicker table td {
+            text-align: center;
+            padding: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .datepicker table td:hover {
+            background-color: #f0f0f0;
+            cursor: pointer;
+        }
+    </style>
+     <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var datepickerInput = document.getElementById("datepicker");
+            var datepicker;
+
+            // Function to create datepicker
+            function createDatePicker() {
+                datepicker = document.createElement('div');
+                datepicker.className = 'datepicker';
+
+                var currentDate = new Date();
+                var currentYear = currentDate.getFullYear();
+                var currentMonth = currentDate.getMonth();
+                var daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+                var table = '<table><thead><tr><th colspan="7">' + currentYear + ' / ' + (currentMonth + 1) + '</th></tr>';
+                table += '<tr><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr></thead>';
+                table += '<tbody><tr>';
+
+                var dayOfWeek = new Date(currentYear, currentMonth, 1).getDay();
+                for (var i = 0; i < dayOfWeek; i++) {
+                    table += '<td></td>';
+                }
+
+                for (var day = 1; day <= daysInMonth; day++) {
+                    var dayOfWeek = new Date(currentYear, currentMonth, day).getDay();
+                    table += '<td onclick="selectDate(' + day + ')">' + day + '</td>';
+                    if (dayOfWeek === 6 && day !== daysInMonth) {
+                        table += '</tr><tr>';
+                    }
+                }
+
+                table += '</tr></tbody></table>';
+                datepicker.innerHTML = table;
+
+                datepicker.style.left = datepickerInput.offsetLeft + 'px';
+                datepicker.style.top = (datepickerInput.offsetTop + datepickerInput.offsetHeight) + 'px';
+
+                document.body.appendChild(datepicker);
+            }
+
+            // Function to show datepicker
+            function showDatePicker() {
+                if (!datepicker) {
+                    createDatePicker();
+                }
+                datepicker.style.display = 'block';
+            }
+
+            // Function to hide datepicker
+            function hideDatePicker() {
+                if (datepicker) {
+                    datepicker.style.display = 'none';
+                }
+            }
+
+            // Function to select date
+            function selectDate(day) {
+                var currentDate = new Date();
+                var currentYear = currentDate.getFullYear();
+                var currentMonth = currentDate.getMonth() + 1; // Months are zero based
+                datepickerInput.value = day + '/' + currentMonth + '/' + currentYear;
+                console.log(datepicker.value);
+                hideDatePicker();
+            }
+
+            // Event listener to show datepicker
+            datepickerInput.addEventListener('focus', function () {
+                showDatePicker();
+            });
+
+            // Event listener to hide datepicker
+            document.getElementById("btn").addEventListener('click', function () {
+                hideDatePicker();
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <center>
+        <h1 style="color:green;">Datepicker Example</h1>
+
+        <p>Select Date: <input type="text" id="datepicker"></p>
+
+        <button id="btn">Close Datepicker</button>
+    </center>
+
+   
+</body>
+
+</html>

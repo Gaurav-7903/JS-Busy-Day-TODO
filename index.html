@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Busy Day</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- <link href="https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet" />
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script> -->
+</head>
+
+<body>
+  <header>
+    <img src="assets/Logo.svg" alt="" class="logo" />
+    <h1>Busy Day</h1>
+  </header>
+
+  <main>
+    <div class="container">
+      <section class="flex title">
+        <p class="fs-42 fw-bold">Hello <span id="userName">Emily</span> !</p>
+        <div class="date">
+          <p id="date"></p>
+          <img src="" alt="" class="icon | temp" id="temperature-icon" />
+          <span id="temperature"></span>
+        </div>
+      </section>
+
+      <section class="flex | filter">
+
+        <button class="add-list-btn flex">
+          <img src="assets/add_icon.svg" alt="" class="icon" /> Add new List
+        </button>
+
+        <div class="filter-section">
+          <select name="filter" id="filter" >
+            <option value="all">All</option>
+            <option value="completed">Completed</option>
+            <option value="pending">Pending</option>
+          </select>
+          <select name="sorting" id="sorting" value="">
+            <option value="asc">A to Z</option>
+            <option value="desc">Z to A</option>
+            <option value="oldest">Oldest</option>
+            <option value="newest">Newest</option>
+          </select>
+        </div>
+
+      </section>
+
+      <section>
+        <ul role="list" class="flex | main-wrapper" >
+
+          <!-- <li class="todo-wrapper">
+            <div class="card bg-color-1">
+              <div class="todo-header flex">
+                <h2 class="fs-todo-heading">Daily TODO</h2>
+                <button visible="false" class="delete-list">
+                  <img src="assets/delete_icon.svg" alt="" />
+                </button>
+              </div>
+
+              <div class="todo-date">
+                <img src="assets/calendar.svg" alt="Calendar Icon" class="calendar-icon"/>
+                 <input type="date" id="dateID" class="due-date">
+                <p>Today</p>
+              </div>
+
+              <ul class="todo-list" role="list">
+                <li class="todo-item">
+                  <input type="checkbox" checked />
+                  <span>Stay positive</span>
+                  <img src="assets/close_icon.svg" alt="" class="icon delete-task | delete-icon" />
+                </li>
+                <li class="todo-item">
+                  <input type="checkbox" checked />
+                  <span>Deep clean floors.</span>
+                  <img src="assets/close_icon.svg" alt="" class="icon delete-task | delete-icon" />
+                </li>
+                <li class="todo-item">
+                  <input type="checkbox" />
+                  <span>Wash windows.</span>
+                  <img src="assets/close_icon.svg" alt="" class="icon delete-task | delete-icon" />
+                </li>
+                <li class="todo-item">
+                  <input type="checkbox" />
+                  <span>Sanitize high-touch areas</span>
+                  <img src="assets/close_icon.svg" alt="" class="icon delete-task | delete-icon" />
+                </li>
+              </ul>
+              <div class="task-input-container">
+                <input type="text" name="" id="" placeholder="Add a Task" class="add-new-task" />
+              </div>
+            </div>
+          </li> -->
+
+        </ul>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2024 Busy Day by ScriptedSprouts</p>
+  </footer>
+  <script src="script.js"></script>
+    <!-- <script> 
+		$(function () { 
+			$("#dateID").datepicker(); 
+			// $("#dateID").datepicker("dialog", "10/12/2012"); 
+
+			$("#btn").on('click', function () { 
+				$("#dateID").datepicker("hide"); 
+			}); 
+		}); 
+	</script>  -->
+
+</body>
+
+</html>

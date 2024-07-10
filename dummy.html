@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .todo-date {
+        display: flex;
+        align-items: center;
+        position: relative;
+      }
+
+      .calendar-icon {
+        cursor: pointer;
+      }
+
+      .date-input {
+        position: absolute;
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        cursor: pointer;
+      }
+
+      .todo-date p {
+        margin-left: 10px;
+      }
+
+      input[type="date"]::-webkit-calendar-picker-indicator {
+          content: url('./assets/calendar.svg');
+  }
+    </style>
+  </head>
+  <body>
+    <div class="todo-date">
+      <img
+        src="assets/calendar.svg"
+        alt="Calendar Icon"
+        class="calendar-icon"
+      />
+      <input type="date" id="date-input" class="date-input" />
+      <p>Today</p>
+    </div>
+
+    <input type="date" name="" id="">
+
+    <script>
+      document
+        .querySelector(".calendar-icon")
+        .addEventListener("click", function () {
+          document.querySelector(".date-input").click();
+        });
+    </script>
+  </body>
+</html>
