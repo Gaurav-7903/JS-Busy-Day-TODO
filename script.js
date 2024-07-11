@@ -119,8 +119,6 @@ function searchTasks() {
                     task.style.display = "none";
                 }
             });
-
-            // If no tasks match, hide the list
             if (!listMatches) {
                 list.style.display = "none";
             }
@@ -161,13 +159,14 @@ async function fetchTemperature() {
 }
 fetchTemperature();
 
-function addNewList( event, listData = undefined, heading = "Add Title", date = "", contenteditable = true
+function addNewList( event, listData = undefined, id = Date.now().toString() , heading = "Add title", date = "", contenteditable = true
 ) {
     console.log("ListData  ", listData);
     let bg_index = totalTodo % 5;
     totalTodo++;
     const newTodoContainer = document.createElement("li");
     newTodoContainer.classList.add("todo-wrapper");
+    newTodoContainer.setAttribute("list-id", id);
     newTodoContainer.innerHTML = `
         <div class="card bg-color-${bg_index}">
               <div class="todo-header flex">
@@ -178,8 +177,8 @@ function addNewList( event, listData = undefined, heading = "Add Title", date = 
               </div>
 
               <div class="todo-date">
-                <img src="assets/calendar.svg" alt="Calendar Icon" class="calendar-icon"/>
-                <input type="date" id="dateID" class="due-date" value=${date}>
+                <button id="calendarIcon" class="calendar-icon" visible="false"><img src="assets/calendar.svg" alt="Calendar Icon" class="cal-btn"></button>
+                <input type="date" id="dateID" class="due-date">
                 <p>Today</p>
               </div>
 
@@ -193,7 +192,7 @@ function addNewList( event, listData = undefined, heading = "Add Title", date = 
 
     if (listData) {
         console.log("This is List Data of Loading", listData);
-        const listId = heading;
+        const listId = id;
         const ul = newTodoContainer.querySelector("ul");
         originalTaskOrder.set(listId, []);
         listData.forEach((taskData) => {
@@ -214,16 +213,12 @@ function addNewList( event, listData = undefined, heading = "Add Title", date = 
     }
     mainTodoContainer.appendChild(newTodoContainer);
     setupTitle(newTodoContainer.querySelector(".editable-title"));
-    setupTaskInput(
-        newTodoContainer.querySelector(".add-new-task"),
-        newTodoContainer
-    );
+    setupTaskInput( newTodoContainer.querySelector(".add-new-task"),newTodoContainer);
 
-    setupDeleteButton(
-        newTodoContainer.querySelector(".delete-list"),
-        newTodoContainer
-    );
+    setupDeleteButton(newTodoContainer.querySelector(".delete-list"),newTodoContainer);
+ 
 }
+
 
 document.querySelectorAll(".add-new-task").forEach((input) => {
     setupTaskInput(input, input.closest(".todo-wrapper"));
@@ -263,7 +258,7 @@ function setupTaskInput(input, listContainer) {
             <img src="assets/close_icon.svg" alt="" class="icon delete-task | delete-icon" />`;
             input.parentNode.parentNode.querySelector("ul").appendChild(newTask);
 
-            const listId = listContainer.querySelector("h2").innerText;
+            const listId = listContainer.getAttribute("list-id");
             if (!originalTaskOrder.has(listId)) {
                 originalTaskOrder.set(listId, []);
             }
@@ -287,8 +282,9 @@ function setupTaskCheckbox(checkbox) {
 
 function setupDeleteButton(button, listContainer) {
     button.addEventListener("click", function () {
-        const listId = listContainer.querySelector("h2").innerText;
+        const listId = listContainer.getAttribute('list-id');
         originalTaskOrder.delete(listId);
+        console.log(originalTaskOrder);
         listContainer.remove();
     });
 }
@@ -296,7 +292,7 @@ function setupDeleteButton(button, listContainer) {
 function setupTaskDeleteButton(button) {
     button.addEventListener("click", function () {
         const task = button.parentNode;
-        const listId = task.closest(".todo-wrapper").querySelector("h2").innerText;
+        const listId = task.closest(".todo-wrapper").getAttribute('list-id');
         const taskList = originalTaskOrder.get(listId);
         taskList.splice(taskList.indexOf(task), 1);
         task.remove();
@@ -309,7 +305,7 @@ function loadData() {
     if (lists) {
         lists.forEach((list) => {
             console.log("New list: " + list);
-            addNewList(undefined, list.tasks, list.title, list.dueDate, false);
+            addNewList(undefined, list.tasks, list.id, list.title, list.dueDate, false);
         });
     }
 }
@@ -320,12 +316,13 @@ function saveData() {
         console.log(list);
 
         const listData = {
+            id : list.getAttribute('list-id'),
             title: list.querySelector("h2").innerText,
             dueDate: list.querySelector(".due-date").value,
             tasks: [],
         };
         console.log(listData);
-        const listId = listData.title;
+        const listId = listData.id;
         console.log(listId);
         const taskList = originalTaskOrder.get(listId) || [];
         console.log(taskList);
