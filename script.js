@@ -351,6 +351,7 @@ function saveData() {
         });
         lists.push(listData);
     });
+    lists.reverse();
     localStorage.setItem("toDoLists", JSON.stringify(lists));
 }
 
