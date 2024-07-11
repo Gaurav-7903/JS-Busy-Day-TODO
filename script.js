@@ -159,7 +159,7 @@ async function fetchTemperature() {
 }
 fetchTemperature();
 
-function addNewList( event, listData = undefined, id = Date.now().toString() , heading = "Add title", date = "", contenteditable = true
+function addNewList( event, listData = undefined, id = Date.now().toString() , heading = "Add title", date = new Date().toDateString(), contenteditable = true
 ) {
     console.log("ListData  ", listData);
     let bg_index = totalTodo % 5;
@@ -177,10 +177,10 @@ function addNewList( event, listData = undefined, id = Date.now().toString() , h
               </div>
 
               <div class="todo-date">
-                <button id="calendarIcon" class="calendar-icon" visible="false"><img src="assets/calendar.svg" alt="Calendar Icon" class="cal-btn"></button>
-                <input type="date" id="dateID" class="due-date">
-                <p>Today</p>
-              </div>
+                <button class="cal-btn" visible="false"><img src="assets/calendar.svg" alt="Calendar Icon" class="calendar-icon"></button>
+                <input type="text" class="due-date">
+                <p>${date}</p>
+            </div>
 
               <ul class="todo-list" role="list">
             </ul>
@@ -214,7 +214,6 @@ function addNewList( event, listData = undefined, id = Date.now().toString() , h
     mainTodoContainer.appendChild(newTodoContainer);
     setupTitle(newTodoContainer.querySelector(".editable-title"));
     setupTaskInput( newTodoContainer.querySelector(".add-new-task"),newTodoContainer);
-
     setupDeleteButton(newTodoContainer.querySelector(".delete-list"),newTodoContainer);
  
 }
@@ -318,7 +317,7 @@ function saveData() {
         const listData = {
             id : list.getAttribute('list-id'),
             title: list.querySelector("h2").innerText,
-            dueDate: list.querySelector(".due-date").value,
+            dueDate: list.querySelector("p").textContent,
             tasks: [],
         };
         console.log(listData);
@@ -340,3 +339,27 @@ function saveData() {
 
 window.addEventListener("beforeunload", saveData);
 document.addEventListener("DOMContentLoaded", loadData);
+
+
+
+function setUpTaskDate(dueDate, dateContainer) {
+    $(dueDate).datepicker({
+        dateFormat: "D M d yy",
+        onSelect: function(dateText) {
+            dateContainer.textContent = dateText;
+        }
+    });
+}
+
+mainTodoContainer.addEventListener("click", function(event) {
+    const target = event.target;
+    if (target && target.closest(".cal-btn")) {
+        const todoContainer = target.closest(".todo-wrapper");
+        if (todoContainer) {
+            const dueDate = todoContainer.querySelector(".due-date");
+            const dateDisplay = todoContainer.querySelector('p');
+            setUpTaskDate(dueDate, dateDisplay);
+            $(dueDate).datepicker("show");
+        }
+    }
+});
