@@ -35,16 +35,19 @@
         </button>
 
         <div class="filter-section">
+          <div class="search">
+            <input type="text" id="search" placeholder="Search tasks..." aria-visible="true" class="search-todo">
+          </div>
           <select name="filter" id="filter" >
             <option value="all">All</option>
             <option value="completed">Completed</option>
             <option value="pending">Pending</option>
           </select>
           <select name="sorting" id="sorting" value="">
-            <option value="asc">A to Z</option>
-            <option value="desc">Z to A</option>
             <option value="oldest">Oldest</option>
             <option value="newest">Newest</option>
+            <option value="asc">A to Z</option>
+            <option value="desc">Z to A</option>
           </select>
         </div>
 

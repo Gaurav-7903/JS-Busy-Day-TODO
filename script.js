@@ -32,6 +32,7 @@ const mainTodoContainer = document.querySelector(".main-wrapper");
 
 const filters = document.getElementById("filter");
 const sorting = document.getElementById("sorting");
+const searchInput = document.getElementById('search')
 
 // filer task
 function filterTasks() {
@@ -91,7 +92,43 @@ function sortTasks() {
 
 sorting.addEventListener("change", sortTasks);
 
-sorting.addEventListener("change", sortTasks);
+// searching for tasks
+function searchTasks() {
+    const searchValue = searchInput.value.toLowerCase();
+
+    document.querySelectorAll(".todo-wrapper").forEach((list) => {
+        const title = list.querySelector(".editable-title").textContent.toLowerCase();
+        const tasks = list.querySelectorAll(".todo-item");
+        let listMatches = false;
+
+        // Check if the title matches the search value
+        if (title.includes(searchValue)) {
+            listMatches = true;
+            list.style.display = "block";
+            tasks.forEach((task) => {
+                task.style.display = "flex"; // Show all tasks if the title matches
+            });
+        } else {
+            // Check if any task matches the search value
+            tasks.forEach((task) => {
+                const taskText = task.querySelector(".task-text").textContent.toLowerCase();
+                if (taskText.includes(searchValue)) {
+                    task.style.display = "flex";
+                    listMatches = true;
+                } else {
+                    task.style.display = "none";
+                }
+            });
+
+            // If no tasks match, hide the list
+            if (!listMatches) {
+                list.style.display = "none";
+            }
+        }
+    });
+}
+
+searchInput.addEventListener('input', searchTasks);
 
 // adding new list
 add_new_list.addEventListener("click", addNewList);

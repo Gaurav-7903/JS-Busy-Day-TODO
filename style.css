@@ -408,3 +408,41 @@ footer {
   bottom: 0;
   width: 100%;
 }
+
+/* new added  */
+.search{
+  position: relative;
+  height: max-content;
+}
+
+
+.search-todo {
+  border: 1px solid red;
+  padding-left: 30px;
+  height: 35px;
+  font-size: 16px;
+  border-radius: 5px; 
+}
+
+.search input{
+  border: 1px solid #000;
+  margin-block: auto;
+  transition: box-shadow 0.3s ease;
+}
+
+.search::before {
+  content: url('assets/search_icon.svg'); 
+  position: absolute;
+  left: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px; 
+  height: 18px; 
+  pointer-events: none;
+}
+
+.search-todo:focus {
+  outline: none; /* Remove default outline */
+  box-shadow: 0 0 2px 1px rgba(110, 110, 110, 0.5); /* Add custom shadow outline */
+  border-color: rgba(110, 110, 110, 0.5); /* Optional: Change border color on focus */
+}
