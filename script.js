@@ -143,6 +143,23 @@ function setDate() {
 }
 setDate();
 
+
+function decideDay(date) {
+    const today = new Date();
+    const dateObj = new Date(date);
+    today.setHours(0, 0, 0, 0);
+    dateObj.setHours(0, 0, 0, 0);
+    const dayDiff = (dateObj - today) / (1000 * 60 * 60 * 24);
+    console.log(dayDiff);
+    if (dayDiff === 0) {
+        return "Today";
+    } else if (dayDiff === 1) {
+        return `Tomorrow, ${date.toLocaleString().slice(4)}`;
+    } else {
+        return date; // Or you could return any other string
+    }
+}
+
 function kelvinToCelsius(kelvin) {
     return kelvin - 273.15;
 }
@@ -179,7 +196,7 @@ function addNewList( event, listData = undefined, id = Date.now().toString() , h
               <div class="todo-date">
                 <button class="cal-btn" visible="false"><img src="assets/calendar.svg" alt="Calendar Icon" class="calendar-icon"></button>
                 <input type="text" class="due-date">
-                <p>${date}</p>
+                <p>${date.startsWith("Today") || date.startsWith("Tomorrow") ?date : decideDay(date)}</p>
             </div>
 
               <ul class="todo-list" role="list">
@@ -211,7 +228,7 @@ function addNewList( event, listData = undefined, id = Date.now().toString() , h
             setupTaskCheckbox(task.querySelector(".task-check")); // Set up checkbox
         });
     }
-    mainTodoContainer.appendChild(newTodoContainer);
+    mainTodoContainer.prepend(newTodoContainer);
     setupTitle(newTodoContainer.querySelector(".editable-title"));
     setupTaskInput( newTodoContainer.querySelector(".add-new-task"),newTodoContainer);
     setupDeleteButton(newTodoContainer.querySelector(".delete-list"),newTodoContainer);
@@ -346,7 +363,7 @@ function setUpTaskDate(dueDate, dateContainer) {
     $(dueDate).datepicker({
         dateFormat: "D M d yy",
         onSelect: function(dateText) {
-            dateContainer.textContent = dateText;
+            dateContainer.textContent = decideDay(dateText);
         }
     });
 }
