@@ -6,8 +6,6 @@ This To-Do Application is built using JavaScript with a responsive design create
 
 ## Features
 
-![Features](image.png)
-
 1. **Add**: Ability to add new tasks.
 2. **Edit (inline editing)**: Edit tasks directly within the list.
 3. **Delete**: Remove tasks from the list.
@@ -33,7 +31,7 @@ To run this application locally, follow these steps:
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/yourusername/todo-app.git
+    git clone https://github.com/Gaurav-7903/todo-app.git
     ```
 
 2. Navigate to the project directory:

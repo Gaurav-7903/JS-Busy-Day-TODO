@@ -1,25 +1,12 @@
-const API_KEY = "9b740d3a887a698b9872524b3397fac6";
+const API_KEY = "YourAPIKey";
 const API = `https://api.openweathermap.org/data/2.5/weather?lat=22.3039&lon=70.8022&appid=${API_KEY}`;
 
 const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-const monthsOfYear = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-];
+const monthsOfYear = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec",];
 let totalTodo = 1;
-
 let originalTaskOrder = new Map();
 
+// fetch the name of user
 if (!localStorage.getItem("userName")) {
     const userName = prompt("Enter your Name");
     localStorage.setItem("userName", userName);
@@ -27,6 +14,7 @@ if (!localStorage.getItem("userName")) {
 const user = localStorage.getItem("userName");
 document.getElementById("userName").textContent = user;
 
+// declare a vailable
 const add_new_list = document.querySelector(".add-list-btn");
 const mainTodoContainer = document.querySelector(".main-wrapper");
 
@@ -34,103 +22,8 @@ const filters = document.getElementById("filter");
 const sorting = document.getElementById("sorting");
 const searchInput = document.getElementById('search')
 
-// filer task
-function filterTasks() {
-    const filterValue = filters.value;
-    document.querySelectorAll(".todo-wrapper").forEach((list) => {
-        list.querySelectorAll(".todo-item").forEach((task) => {
-            const isCompleted = task.querySelector("input[type='checkbox']").checked;
-            if (
-                filterValue === "all" ||
-                (filterValue === "completed" && isCompleted) ||
-                (filterValue === "pending" && !isCompleted)
-            ) {
-                task.style.display = "flex";
-            } else {
-                task.style.display = "none";
-            }
-        });
-    });
-}
-filters.addEventListener("change", filterTasks);
 
-
-// sorting task
-function sortTasks() {
-    const sortingValue = sorting.value;
-    console.log(sortingValue);
-    document.querySelectorAll(".todo-wrapper").forEach((list) => {
-
-
-        const mapKey = list.querySelector('h2').textContent;
-        console.log("Map Key",originalTaskOrder.get(mapKey));
-
-        const tasksArray = Array.from(list.querySelectorAll(".todo-item"));
-        console.log(tasksArray);
-        tasksArray.sort((a, b) => {
-            const aText = a.querySelector(".task-text").innerText.toLowerCase();
-            const bText = b.querySelector(".task-text").innerText.toLowerCase();
-            
-            if (sortingValue === "asc") {
-                return aText.localeCompare(bText);
-            } else if (sortingValue === "desc") {
-                return bText.localeCompare(aText);  
-            } else if (sortingValue === "oldest") {
-                // Assuming tasks have a data attribute for their creation date
-                const aDate = new Date(a.getAttribute("data-created"));
-                const bDate = new Date(b.getAttribute("data-created"));
-                return aDate - bDate;
-            } else if (sortingValue === "newest") {
-                // Assuming tasks have a data attribute for their creation date
-                const aDate = new Date(a.getAttribute("data-created"));
-                const bDate = new Date(b.getAttribute("data-created"));
-                return bDate - aDate;
-            }
-        }).forEach((task) => list.querySelector("ul").appendChild(task));
-    });
-}
-
-sorting.addEventListener("change", sortTasks);
-
-// searching for tasks
-function searchTasks() {
-    const searchValue = searchInput.value.toLowerCase();
-
-    document.querySelectorAll(".todo-wrapper").forEach((list) => {
-        const title = list.querySelector(".editable-title").textContent.toLowerCase();
-        const tasks = list.querySelectorAll(".todo-item");
-        let listMatches = false;
-
-        // Check if the title matches the search value
-        if (title.includes(searchValue)) {
-            listMatches = true;
-            list.style.display = "block";
-            tasks.forEach((task) => {
-                task.style.display = "flex"; // Show all tasks if the title matches
-            });
-        } else {
-            // Check if any task matches the search value
-            tasks.forEach((task) => {
-                const taskText = task.querySelector(".task-text").textContent.toLowerCase();
-                if (taskText.includes(searchValue)) {
-                    task.style.display = "flex";
-                    listMatches = true;
-                } else {
-                    task.style.display = "none";
-                }
-            });
-            if (!listMatches) {
-                list.style.display = "none";
-            }
-        }
-    });
-}
-
-searchInput.addEventListener('input', searchTasks);
-
-// adding new list
-add_new_list.addEventListener("click", addNewList);
-
+// utile functions
 function setDate() {
     var today = new Date();
     var formattedDate =
@@ -150,7 +43,6 @@ function decideDay(date) {
     today.setHours(0, 0, 0, 0);
     dateObj.setHours(0, 0, 0, 0);
     const dayDiff = (dateObj - today) / (1000 * 60 * 60 * 24);
-    console.log(dayDiff);
     if (dayDiff === 0) {
         return "Today";
     } else if (dayDiff === 1) {
@@ -176,9 +68,91 @@ async function fetchTemperature() {
 }
 fetchTemperature();
 
+// filer task
+function filterTasks() {
+    const filterValue = filters.value;
+    document.querySelectorAll(".todo-wrapper").forEach((list) => {
+        list.querySelectorAll(".todo-item").forEach((task) => {
+            const isCompleted = task.querySelector("input[type='checkbox']").checked;
+            if (
+                filterValue === "all" ||
+                (filterValue === "completed" && isCompleted) ||
+                (filterValue === "pending" && !isCompleted)
+            ) {
+                task.style.display = "flex";
+            } else {
+                task.style.display = "none";
+            }
+        });
+    });
+}
+filters.addEventListener("change", filterTasks);
+
+
+// sorting task
+function sortTasks() {
+    const sortingValue = sorting.value;
+    document.querySelectorAll(".todo-wrapper").forEach((list) => {
+        const mapKey = list.querySelector('h2').textContent;
+        const tasksArray = Array.from(list.querySelectorAll(".todo-item"));
+        tasksArray.sort((a, b) => {
+            const aText = a.querySelector(".task-text").innerText.toLowerCase();
+            const bText = b.querySelector(".task-text").innerText.toLowerCase();
+            
+            if (sortingValue === "asc") {
+                return aText.localeCompare(bText);
+            } else if (sortingValue === "desc") {
+                return bText.localeCompare(aText);  
+            } else if (sortingValue === "oldest") {
+                const aDate = new Date(a.getAttribute("data-created"));
+                const bDate = new Date(b.getAttribute("data-created"));
+                return aDate - bDate;
+            } else if (sortingValue === "newest") {
+                const aDate = new Date(a.getAttribute("data-created"));
+                const bDate = new Date(b.getAttribute("data-created"));
+                return bDate - aDate;
+            }
+        }).forEach((task) => list.querySelector("ul").appendChild(task));
+    });
+}
+sorting.addEventListener("change", sortTasks);
+
+// searching for tasks
+function searchTasks() {
+    const searchValue = searchInput.value.toLowerCase();
+
+    document.querySelectorAll(".todo-wrapper").forEach((list) => {
+        const title = list.querySelector(".editable-title").textContent.toLowerCase();
+        const tasks = list.querySelectorAll(".todo-item");
+        let listMatches = false;
+        if (title.includes(searchValue)) {
+            listMatches = true;
+            list.style.display = "block";
+            tasks.forEach((task) => {
+                task.style.display = "flex"; 
+            });
+        } else {
+            tasks.forEach((task) => {
+                const taskText = task.querySelector(".task-text").textContent.toLowerCase();
+                if (taskText.includes(searchValue)) {
+                    task.style.display = "flex";
+                    listMatches = true;
+                } else {
+                    task.style.display = "none";
+                }
+            });
+            if (!listMatches) {
+                list.style.display = "none";
+            }
+        }
+    });
+}
+searchInput.addEventListener('input', searchTasks);
+
+
+// adding new list
 function addNewList( event, listData = undefined, id = Date.now().toString() , heading = "Add title", date = new Date().toDateString(), contenteditable = true
 ) {
-    console.log("ListData  ", listData);
     let bg_index = totalTodo % 5;
     totalTodo++;
     const newTodoContainer = document.createElement("li");
@@ -208,12 +182,10 @@ function addNewList( event, listData = undefined, id = Date.now().toString() , h
     `;
 
     if (listData) {
-        console.log("This is List Data of Loading", listData);
         const listId = id;
         const ul = newTodoContainer.querySelector("ul");
         originalTaskOrder.set(listId, []);
         listData.forEach((taskData) => {
-            console.log(taskData);
             const task = document.createElement("li");
             task.setAttribute("data-created", taskData.created);
             task.classList.add("todo-item");
@@ -234,16 +206,9 @@ function addNewList( event, listData = undefined, id = Date.now().toString() , h
     setupDeleteButton(newTodoContainer.querySelector(".delete-list"),newTodoContainer);
  
 }
+add_new_list.addEventListener("click", addNewList);
 
-
-document.querySelectorAll(".add-new-task").forEach((input) => {
-    setupTaskInput(input, input.closest(".todo-wrapper"));
-});
-
-document.querySelectorAll(".editable-title").forEach((title) => {
-    setupTitle(title);
-});
-
+// setting up title
 function setupTitle(title) {
     title.addEventListener("keypress", function (e) {
         if (e.key === "Enter") {
@@ -262,6 +227,7 @@ function setupTitle(title) {
     });
 }
 
+// setup input fields of task to user
 function setupTaskInput(input, listContainer) {
     input.addEventListener("keypress", function (e) {
         if (e.key === "Enter" && input.value.trim() !== "") {
@@ -286,25 +252,22 @@ function setupTaskInput(input, listContainer) {
     });
 }
 
-document.querySelectorAll(".delete-list").forEach((list) => {
-    setupDeleteButton(list, list.closest(".todo-wrapper"));
-});
-
 function setupTaskCheckbox(checkbox) {
     checkbox.addEventListener("click", function () {
         filterTasks();
     });
 }
 
+// delete list button
 function setupDeleteButton(button, listContainer) {
     button.addEventListener("click", function () {
         const listId = listContainer.getAttribute('list-id');
         originalTaskOrder.delete(listId);
-        console.log(originalTaskOrder);
         listContainer.remove();
     });
 }
 
+// task delete button
 function setupTaskDeleteButton(button) {
     button.addEventListener("click", function () {
         const task = button.parentNode;
@@ -315,21 +278,56 @@ function setupTaskDeleteButton(button) {
     });
 }
 
+function setUpTaskDate(dueDate, dateContainer) {
+    $(dueDate).datepicker({
+        dateFormat: "D M d yy",
+        onSelect: function(dateText) {
+            dateContainer.textContent = decideDay(dateText);
+        }
+    });
+}
+
+// select date for a task date
+mainTodoContainer.addEventListener("click", function(event) {
+    const target = event.target;
+    if (target && target.closest(".cal-btn")) {
+        const todoContainer = target.closest(".todo-wrapper");
+        if (todoContainer) {
+            const dueDate = todoContainer.querySelector(".due-date");
+            const dateDisplay = todoContainer.querySelector('p');
+            setUpTaskDate(dueDate, dateDisplay);
+            $(dueDate).datepicker("show");
+        }
+    }
+});
+
+
+document.querySelectorAll(".delete-list").forEach((list) => {
+    setupDeleteButton(list, list.closest(".todo-wrapper"));
+});
+
+document.querySelectorAll(".add-new-task").forEach((input) => {
+    setupTaskInput(input, input.closest(".todo-wrapper"));
+});
+
+document.querySelectorAll(".editable-title").forEach((title) => {
+    setupTitle(title);
+});
+
+// load the data from local storage
 function loadData() {
     const lists = JSON.parse(localStorage.getItem("toDoLists"));
-    console.log("List", lists);
     if (lists) {
         lists.forEach((list) => {
-            console.log("New list: " + list);
             addNewList(undefined, list.tasks, list.id, list.title, list.dueDate, false);
         });
     }
 }
 
+// save the da
 function saveData() {
     const lists = [];
     document.querySelectorAll(".todo-wrapper").forEach((list) => {
-        console.log(list);
 
         const listData = {
             id : list.getAttribute('list-id'),
@@ -337,11 +335,8 @@ function saveData() {
             dueDate: list.querySelector("p").textContent,
             tasks: [],
         };
-        console.log(listData);
         const listId = listData.id;
-        console.log(listId);
         const taskList = originalTaskOrder.get(listId) || [];
-        console.log(taskList);
         taskList.forEach((task) => {
             listData.tasks.push({
                 text: task.querySelector(".task-text").innerText.trim(),
@@ -357,27 +352,3 @@ function saveData() {
 
 window.addEventListener("beforeunload", saveData);
 document.addEventListener("DOMContentLoaded", loadData);
-
-
-
-function setUpTaskDate(dueDate, dateContainer) {
-    $(dueDate).datepicker({
-        dateFormat: "D M d yy",
-        onSelect: function(dateText) {
-            dateContainer.textContent = decideDay(dateText);
-        }
-    });
-}
-
-mainTodoContainer.addEventListener("click", function(event) {
-    const target = event.target;
-    if (target && target.closest(".cal-btn")) {
-        const todoContainer = target.closest(".todo-wrapper");
-        if (todoContainer) {
-            const dueDate = todoContainer.querySelector(".due-date");
-            const dateDisplay = todoContainer.querySelector('p');
-            setUpTaskDate(dueDate, dateDisplay);
-            $(dueDate).datepicker("show");
-        }
-    }
-});
