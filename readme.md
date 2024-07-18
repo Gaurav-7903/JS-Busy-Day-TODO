@@ -31,13 +31,13 @@ To run this application locally, follow these steps:
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/Gaurav-7903/todo-app.git
+    git clone https://github.com/Gaurav-7903/JS-Busy-Day-TODO.git
     ```
 
 2. Navigate to the project directory:
 
     ```bash
-    cd todo-app
+    cd JS-Busy-Day-TODO
     ```
 
 3. Open `index.html` in your web browser to start using the app.
