@@ -45,10 +45,18 @@
             <option value="pending">Pending</option>
           </select>
           <select name="sorting" id="sorting" value="">
-            <option value="oldest">Oldest</option>
-            <option value="newest">Newest</option>
-            <option value="asc">A to Z</option>
-            <option value="desc">Z to A</option>
+            <optgroup label="Task Created">
+              <option value="created-oldest">Created: Oldest</option>
+              <option value="created-newest">Created: Newest</option>
+            </optgroup>
+            <optgroup label="Due Date">
+              <option value="due-oldest">Due Date: Oldest</option>
+            <option value="due-newest">Due Date: Newest</option>
+            </optgroup>
+            <optgroup label="Alphabetically">
+              <option value="asc">A to Z</option>
+              <option value="desc">Z to A</option>
+            </optgroup>
           </select>
         </div>
 
