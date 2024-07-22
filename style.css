@@ -322,6 +322,7 @@ section {
   transition: .5s all;
   break-inside: avoid;
   margin-bottom: 2rem;
+  position: relative;
 }
 
 .card {
@@ -588,4 +589,24 @@ footer {
     background: transparent !important;
     border: none !important;
     color: #000 !important;
+}
+
+/* context - menu */
+.context-menu {
+  display: none;
+  position: absolute;
+  z-index: 1000;
+  background-color: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  transition: .1s ease-in-out;
+}
+
+.context-menu li {
+  padding: .4rem .6rem;
+  cursor: pointer;
+}
+
+.context-menu li:hover {
+  background-color: #f0f0f0;
 }

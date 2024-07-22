@@ -14,7 +14,7 @@ if (!localStorage.getItem("userName")) {
 const user = localStorage.getItem("userName");
 document.getElementById("userName").textContent = user;
 
-// declare a vailable
+// declare a variable
 const add_new_list = document.querySelector(".add-list-btn");
 const mainTodoContainer = document.querySelector(".main-wrapper");
 
@@ -36,7 +36,6 @@ function setDate() {
 }
 setDate();
 
-
 function decideDay(date) {
     const today = new Date();
     const dateObj = new Date(date);
@@ -57,14 +56,18 @@ function kelvinToCelsius(kelvin) {
 }
 
 async function fetchTemperature() {
-    const response = await fetch(API);
-    const data = await response.json();
-    document.getElementById("temperature").textContent = `${Math.trunc(
-        kelvinToCelsius(data.main.temp)
-    )}C`;
-    document.getElementById(
-        "temperature-icon"
-    ).src = `assets/weather/${data.weather[0].icon}.svg`;
+    try {
+        const response = await fetch(API);
+        const data = await response.json();
+        document.getElementById("temperature").textContent = `${Math.trunc(
+            kelvinToCelsius(data.main.temp)
+        )}C`;
+        document.getElementById(
+            "temperature-icon"
+        ).src = `assets/weather/${data.weather[0].icon}.svg`;
+    } catch (error) {
+        console.log("API ERROR", error);
+    }
 }
 fetchTemperature();
 
@@ -87,7 +90,6 @@ function filterTasks() {
     });
 }
 filters.addEventListener("change", filterTasks);
-
 
 // sorting task
 function sortTasks() {
@@ -301,7 +303,6 @@ mainTodoContainer.addEventListener("click", function(event) {
     }
 });
 
-
 document.querySelectorAll(".delete-list").forEach((list) => {
     setupDeleteButton(list, list.closest(".todo-wrapper"));
 });
@@ -313,6 +314,72 @@ document.querySelectorAll(".add-new-task").forEach((input) => {
 document.querySelectorAll(".editable-title").forEach((title) => {
     setupTitle(title);
 });
+
+// context-menu
+const contextMenu = document.getElementById("context-menu");
+let currentTodoWrapper = null;
+
+document.addEventListener("contextmenu", function (e) {
+    const todoWrapper = e.target.closest(".todo-wrapper");
+    if (todoWrapper) {
+        e.preventDefault();
+        currentTodoWrapper = todoWrapper;
+        const scrollX = window.scrollX;
+        const scrollY = window.scrollY;
+
+        contextMenu.style.top = `${e.clientY + scrollY}px`;
+        contextMenu.style.left = `${e.clientX + scrollX}px`;
+        contextMenu.style.display = "block";
+    } else {
+        contextMenu.style.display = "none";
+    }
+});
+
+// hide the context menu
+document.addEventListener("click", function () {
+    contextMenu.style.display = "none";
+    currentTodoWrapper = null;
+});
+
+// checked all task of todo
+document.getElementById("select-all").addEventListener("click", function () {
+    if (currentTodoWrapper) {
+        currentTodoWrapper.querySelectorAll(".task-check").forEach((checkbox) => {
+            checkbox.checked = true;
+        });
+    }
+    contextMenu.style.display = "none";
+    filterTasks();
+});
+
+// uncheck all tasks
+document.getElementById("unselect-all").addEventListener("click", function () {
+    if (currentTodoWrapper) {
+        currentTodoWrapper.querySelectorAll(".task-check").forEach((checkbox) => {
+            checkbox.checked = false;
+        });
+    }
+    contextMenu.style.display = "none";
+    filterTasks();
+});
+
+// delete all selected tasks
+document
+    .getElementById("delete-selected")
+    .addEventListener("click", function () {
+        if (currentTodoWrapper) {
+            currentTodoWrapper
+                .querySelectorAll(".task-check:checked")
+                .forEach((checkbox) => {
+                    const task = checkbox.closest(".todo-item");
+                    const listId = currentTodoWrapper.getAttribute("list-id");
+                    const taskList = originalTaskOrder.get(listId);
+                    taskList.splice(taskList.indexOf(task), 1);
+                    task.remove();
+                });
+        }
+        contextMenu.style.display = "none";
+    });
 
 // load the data from local storage
 function loadData() {
@@ -328,7 +395,6 @@ function loadData() {
 function saveData() {
     const lists = [];
     document.querySelectorAll(".todo-wrapper").forEach((list) => {
-
         const listData = {
             id : list.getAttribute('list-id'),
             title: list.querySelector("h2").innerText,
