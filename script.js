@@ -37,16 +37,20 @@ function setDate() {
 setDate();
 
 function decideDay(date) {
+    console.log(date)
     const today = new Date();
     const dateObj = new Date(date);
     today.setHours(0, 0, 0, 0);
     dateObj.setHours(0, 0, 0, 0);
     const dayDiff = (dateObj - today) / (1000 * 60 * 60 * 24);
     if (dayDiff === 0) {
+        console.log("return Today")
         return "Today";
     } else if (dayDiff === 1) {
+        console.log("return Yesterday")
         return `Tomorrow, ${date.toLocaleString().slice(4)}`;
     } else {
+        console.log("return date")
         return date; // Or you could return any other string
     }
 }
@@ -92,30 +96,51 @@ function filterTasks() {
 filters.addEventListener("change", filterTasks);
 
 // sorting task
+function sortListsByDueDate(sortOrder) {
+    const listsArray = Array.from(document.querySelectorAll(".todo-wrapper"));
+    listsArray.sort((a, b) => {
+        const aDueDate = new Date(a.querySelector('p').getAttribute('date'));
+        const bDueDate = new Date(b.querySelector('p').getAttribute('date'));
+        
+        if (sortOrder === "due-oldest") {
+            return aDueDate - bDueDate;
+        } else if (sortOrder === "due-newest") {
+            return bDueDate - aDueDate;
+        }
+        return 0;
+    }).forEach((list) => {
+        document.querySelector(".main-wrapper").appendChild(list);
+    });
+}
+
 function sortTasks() {
     const sortingValue = sorting.value;
-    document.querySelectorAll(".todo-wrapper").forEach((list) => {
-        const mapKey = list.querySelector('h2').textContent;
-        const tasksArray = Array.from(list.querySelectorAll(".todo-item"));
-        tasksArray.sort((a, b) => {
-            const aText = a.querySelector(".task-text").innerText.toLowerCase();
-            const bText = b.querySelector(".task-text").innerText.toLowerCase();
+    if (sortingValue === "due-oldest" || sortingValue === "due-newest") {
+        sortListsByDueDate(sortingValue); // sort the lists based on due dates
+    } else {
+        document.querySelectorAll(".todo-wrapper").forEach((list) => {
+            const tasksArray = Array.from(list.querySelectorAll(".todo-item"));
             
-            if (sortingValue === "asc") {
-                return aText.localeCompare(bText);
-            } else if (sortingValue === "desc") {
-                return bText.localeCompare(aText);  
-            } else if (sortingValue === "oldest") {
-                const aDate = new Date(a.getAttribute("data-created"));
-                const bDate = new Date(b.getAttribute("data-created"));
-                return aDate - bDate;
-            } else if (sortingValue === "newest") {
-                const aDate = new Date(a.getAttribute("data-created"));
-                const bDate = new Date(b.getAttribute("data-created"));
-                return bDate - aDate;
-            }
-        }).forEach((task) => list.querySelector("ul").appendChild(task));
-    });
+            tasksArray.sort((a, b) => {
+                const aText = a.querySelector(".task-text").innerText.toLowerCase();
+                const bText = b.querySelector(".task-text").innerText.toLowerCase();
+                
+                const aCreatedDate = new Date(a.getAttribute("data-created"));
+                const bCreatedDate = new Date(b.getAttribute("data-created"));
+                
+                if (sortingValue === "created-oldest") {
+                    return aCreatedDate - bCreatedDate; // Sort by creation date, oldest first
+                } else if (sortingValue === "created-newest") {
+                    return bCreatedDate - aCreatedDate; // Sort by creation date, newest first
+                } else if (sortingValue === "asc") {
+                    return aText.localeCompare(bText); // sort by alphabet ascending
+                } else if (sortingValue === "desc") {
+                    return bText.localeCompare(aText); // sort by alphabet descending
+                }
+                return 0; // No sorting if no relevant sortOrder
+            }).forEach((task) => list.querySelector("ul").appendChild(task));
+        });
+    }
 }
 sorting.addEventListener("change", sortTasks);
 
@@ -157,6 +182,7 @@ function addNewList( event, listData = undefined, id = Date.now().toString() , h
 ) {
     let bg_index = totalTodo % 5;
     totalTodo++;
+    console.log(date)
     const newTodoContainer = document.createElement("li");
     newTodoContainer.classList.add("todo-wrapper");
     newTodoContainer.setAttribute("list-id", id);
@@ -172,7 +198,7 @@ function addNewList( event, listData = undefined, id = Date.now().toString() , h
               <div class="todo-date">
                 <button class="cal-btn" visible="false"><img src="assets/calendar.svg" alt="Calendar Icon" class="calendar-icon"></button>
                 <input type="text" class="due-date">
-                <p>${date.startsWith("Today") || date.startsWith("Tomorrow") ?date : decideDay(date)}</p>
+                <p date="${date}">${decideDay(date)}</p>
             </div>
 
               <ul class="todo-list" role="list">
@@ -281,10 +307,12 @@ function setupTaskDeleteButton(button) {
 }
 
 function setUpTaskDate(dueDate, dateContainer) {
+    console.log(dateContainer)
     $(dueDate).datepicker({
         dateFormat: "D M d yy",
         onSelect: function(dateText) {
             dateContainer.textContent = decideDay(dateText);
+            dateContainer.setAttribute("date", dateText);
         }
     });
 }
@@ -398,7 +426,7 @@ function saveData() {
         const listData = {
             id : list.getAttribute('list-id'),
             title: list.querySelector("h2").innerText,
-            dueDate: list.querySelector("p").textContent,
+            dueDate: list.querySelector("p").getAttribute("date"),
             tasks: [],
         };
         const listId = listData.id;
